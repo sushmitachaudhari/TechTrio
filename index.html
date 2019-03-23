@@ -7,14 +7,6 @@
     <style>
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
-      /* Always set the map height explicitly to define the size of the div
-       * element that contains the map. */
-      /* #map {
-        height: 425px;
-      }
-      /* Optional: Makes the sample page fill the window. */
-
-      /* Optional: Makes the sample page fill the window. */
       html, body {
         height: 100%;
         margin: 0;
@@ -115,15 +107,13 @@
   </head>
   <body>
     <div>
-
-
-    <div class="container">
-    <div class="row">
-      <!-- Blog Entries Column -->
-      <div class="col-md-8">
-        <h1 class="my-4">Safer Boston
-          <!-- <small>Secondary Text</small> -->
-        </h1>
+      <div class="container">
+        <div class="row">
+          <!-- Blog Entries Column -->
+          <div class="col-md-8">
+            <h1 class="my-4">Safer Boston
+              <!-- <small>Secondary Text</small> -->
+            </h1>
 
         <!-- Blog Post -->
         <div class="card mb-4">
@@ -132,7 +122,6 @@
           <div class="card-img-overlay" style="padding:0px;">
            <div class="float-right hidden-md-up rounded"
                 style="background-color: rgb(240, 241, 242)">
-
            </div>
          </div>
           <div class="card-body">
@@ -277,9 +266,10 @@ AutocompleteDirectionsHandler.prototype.route = function() {
         }
       });
 };
-
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDPVk3oxRMd1zHE8VrK0hLsJNo2_6kCTiM&libraries=places&callback=initMap"
-        async defer></script>
+         async defer></script>
+   <div id="map"></div>
+
   </body>
 </html>
