@@ -1,4 +1,4 @@
-https://sushmitachaudhari.github.io/TechTrio/
+Hosted here: https://sushmitachaudhari.github.io/TechTrio/
 
 
 
