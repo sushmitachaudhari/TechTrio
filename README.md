@@ -1,8 +1,5 @@
 Hosted here: https://sushmitachaudhari.github.io/TechTrio/
 
-Google API key = AIzaSyDPVk3oxRMd1zHE8VrK0hLsJNo2_6kCTiM
-
-
 You can use the [editor on GitHub](https://github.com/sushmitachaudhari/TechTrio/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
 
 Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
