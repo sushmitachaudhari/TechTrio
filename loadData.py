@@ -10,6 +10,9 @@ import time
 import urllib.request
 from math import sqrt
 from _blake2 import BLAKE2B_PERSON_SIZE
+from cmath import inf
+from pip._vendor.pyparsing import originalTextFor
+import matplotlib.pyplot as plt
 
 DATA = "crimes_data.csv"
 
@@ -20,7 +23,7 @@ ZONE_RANGE = 0.005
 ALLOWED_DISTANCE = 0.25
 DEPT_DATE = date.today() # Have set it to default, needs to be updated
 # URL_TO_BE_SCRAPED = 'https://maps.googleapis.com/maps/api/directions/json?origin=42.361361,-71.062872&destination=42.358853,-71.067669&departure_time=1553433312&alternatives=true&mode=walking&key=' + API_KEY
-SECRET_KEY = ""
+SECRET_KEY = "AIzaSyDPVk3oxRMd1zHE8VrK0hLsJNo2_6kCTiM"
 
 def loadFileIntoPickle():
 
@@ -59,10 +62,24 @@ def parseDataSet(source, destination, dept_time):
 	xMax, xMin, yMax, yMin = obtainWalkingRange(source, destination)
 	# print(xMax, xMin, yMax, yMin)
 	
+# 	max_x = -inf
+# 	min_x = inf
+# 	max_y = -inf
+# 	min_y = inf
+	
 	for i in range(1, len(dataset)):
 		location = dataset[i]['Location'].strip('(').strip(')').split(",")
 		loc_x = float(location[0])
 		loc_y = float(location[1])
+		
+# 		if (loc_x > max_x and loc_x != 0):
+# 			max_x = loc_x
+# 		if (loc_x < min_x and loc_x != 0):
+# 			min_x = loc_x
+# 		if (loc_y > max_y and loc_y != 0):
+# 			max_y = loc_y
+# 		if (loc_y < min_y and loc_y != 0):
+# 			min_y = loc_y
 
 		day = dataset[i]['DAY_WEEK']
 		time_of_crime = timeFormat(dataset[i]['FROMDATE'])
@@ -76,7 +93,10 @@ def parseDataSet(source, destination, dept_time):
 		if higher_time_range >= dept_time and dept_time >= lower_time_range:
 			if ((loc_x <= xMax) and (xMin <= loc_x)) and ((yMin <= loc_y) and (loc_y <= yMax)):
 				crime_locations.append((loc_x, loc_y))
-		
+	
+	
+# 	print(min_x, max_x, min_y, max_y)
+	
 	return crime_locations
 
 
@@ -132,6 +152,8 @@ def parseDataFromAPI(maps_url):
 	
 	return points, legs_distance, legs_duration
 
+# creates the url for the request of the data from the google maps API, according to the
+# origin of the path, its destination, and the time of departure
 def url_creator(orig, dest, dep_time):
     x1, y1 = orig
     x2, y2 = dest
@@ -141,7 +163,21 @@ def url_creator(orig, dest, dep_time):
         dep_time) + "&alternatives=true&mode=walking&key=" + SECRET_KEY
     return result
 
+def url_creator_alternatives(orig, dest, dep_time, waypoint):
+	x1, y1 = orig
+	x2, y2 = dest
+	x3, y3 = waypoint
+	result = "https://maps.googleapis.com/maps/api/directions/json?origin=" + str(
+        x1) + "," + str(y1) + "&destination=" + str(
+        x2) + "," + str(y2) + "&departure_time=" + str(
+        dep_time) + "&waypoints=via:" + str(x3) + "," + str(
+		y3) + "&mode=walking&key=" + SECRET_KEY
+		
+	return result
 
+# Author: Audrey Morin
+# Resources: "https://gist.github.com/ismaels/6636986.js"
+# returns a list of tuple coordinates that are represented by the inputted polyline
 def decode(encoded):
     # array that holds the points
     points = []
@@ -182,15 +218,20 @@ def decode(encoded):
         points.append((( lat / 1E5),( lng / 1E5)))  
     return points
 
+# output distance between 2 coordinate tuples
 def distance(p1, p2):
     return sqrt((p1[0] - p2[0])**2 + (p1[1] - p2[1])**2)
 
+# returns true if the inputed coordinates of the pedestrian and the location of the
+# crime are within a preset distance
 def is_close_to_crime(person, crime):
 # 	print(type(person))
 # 	print(crime)
 	return distance(person, crime) < ALLOWED_DISTANCE
 
-# high score = danger
+# returns an integer that evaluates the level of danger encountered along the path
+# dangerous path ---> high score 
+# completely safe ---> 0
 def pathEvaluator(path, crimes):
     score = 0
     for point_pair in zip(path[1:], path):
@@ -206,16 +247,39 @@ def main():
 	# loadFileIntoPickle() # Call this method first time the application is executed.
 	# end_time = datetime.now()
 	# print("Time taken to load the pickle: " + str(end_time - start_time))
-	origin = (42.34638135, -71.10379454)
-	destin = (42.34284135, -71.09698955)
-	time = 1553433312
+	origin = (42.344387, -71.124997)
+	destin = (42.341907, -71.113395)
+	time = 1553440013
 	url = url_creator(origin, destin, time)
-	
+
 	crimes = parseDataSet(source=origin, destination=destin, dept_time=time)
 	points, legs_distance, legs_duration = parseDataFromAPI(url)
+
+# 	testList = [origin, destin]
+ 	 	
+	x1, y1 = origin
+	x2, y2 = destin
+	a = (y2 - y1) / (x2 - x1)
+	mid1, mid2 = ((x1 + x2) / 2, (y1 + y2) / 2)
+	for i in range(-2,3):
+		factor = distance(origin, destin) / 6
+		i = i * factor / sqrt(1 + a**2)
+		waypoint = (mid1 + 1 * i, mid2 - a* i)
+# 		testList.append(waypoint)
+		points2, legs_distance2, legs_duration2 = parseDataFromAPI(
+			url_creator_alternatives(origin, destin, time, waypoint))
+		points = points + points2
+		legs_distance = legs_distance + legs_distance2
+		legs_duration = legs_duration + legs_duration2
+  	
+# 	x, y = zip(*testList)
+# 	plt.scatter(x, y)
+  	
 	for path in points:
+		print(path)
 		print(pathEvaluator(decode(path), crimes))
 
+# 	plt.show()
 
 if __name__ == '__main__':
 	main()
