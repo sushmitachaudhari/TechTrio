@@ -1,73 +1,125 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+  <head>
+    <title>Place Autocomplete and Directions</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <style>
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
-<head>
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      .controls {
+        margin-top: 10px;
+        border: 1px solid transparent;
+        border-radius: 2px 0 0 2px;
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        height: 32px;
+        outline: none;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+      }
 
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
+      #origin-input,
+      #destination-input {
+        background-color: #fff;
+        font-family: Roboto;
+        font-size: 15px;
+        font-weight: 300;
+        margin-left: 12px;
+        padding: 0 11px 0 13px;
+        text-overflow: ellipsis;
+        width: 200px;
+      }
 
-  <title>Tech Trio</title>
+      #origin-input:focus,
+      #destination-input:focus {
+        border-color: #4d90fe;
+      }
 
-  <script type="text/javascript">
-  function changeText2(){
-  var userInput = document.getElementById('userInput').value;
-  document.getElementById('comments').innerHTML += '<img src="img/paw2.jpg" width=20px/>' + "Me: "+ userInput+ '<br/>';
+      #mode-selector {
+        color: #fff;
+        background-color: #4d90fe;
+        margin-left: 12px;
+        padding: 5px 11px 0px 11px;
+      }
 
-  }
+      #mode-selector label {
+        font-family: Roboto;
+        font-size: 13px;
+        font-weight: 300;
+      }
 
-  function colorchange(id) {
 
-    var background = document.getElementById(id).style.backgroundColor;
-    if (background == "rgb(255, 185, 0)") {
-        document.getElementById(id).style.background = "rgb(26,255,0)";
+      #map {
+        height: 425px;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      .controls {
+        margin-top: 10px;
+        border: 1px solid transparent;
+        border-radius: 2px 0 0 2px;
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        height: 32px;
+        outline: none;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+      }
 
-          document.getElementById('goingUsers').innerHTML += '<img src="img/paw2.jpg" width=20px/>' +  "Me";
-    } else {
-        document.getElementById(id).style.background = "rgb(255,185,0)";
-        document.getElementById('goingUsers').innerHTML="";
-    }
+      #origin-input,
+      #destination-input {
+        background-color: #fff;
+        font-family: Roboto;
+        font-size: 15px;
+        font-weight: 300;
+        margin-left: 12px;
+        padding: 0 11px 0 13px;
+        text-overflow: ellipsis;
+        width: 200px;
+      }
 
-}
-  </script>
+      #origin-input:focus,
+      #destination-input:focus {
+        border-color: #4d90fe;
+      }
 
-  <!-- Bootstrap core CSS -->
-  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Custom styles for this template -->
-  <link href="css/blog-home.css" rel="stylesheet">
+      #mode-selector {
+        color: #fff;
+        background-color: #4d90fe;
+        margin-left: 12px;
+        padding: 5px 11px 0px 11px;
+      }
 
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-</head>
-<body>
-  <!-- Navigation -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-    <div class="container">
-      <img src="img/boston.png" width="40px" style="border-radius: 20%; margin-right : 20px">
-      <a class="navbar-brand" href="./index.html">Safe Boston</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarResponsive">
-        <ul class="navbar-nav ml-auto">
+      #mode-selector label {
+        font-family: Roboto;
+        font-size: 13px;
+        font-weight: 300;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <div class="container">
+        <div class="row">
+          <!-- Blog Entries Column -->
+          <div class="col-md-8">
+            <h1 class="my-4">Safer Boston
+              <!-- <small>Secondary Text</small> -->
+            </h1>
 
-        </ul>
-      </div>
-    </div>
-  </nav>
-  <!-- Page Content -->
-  <div class="container">
-    <div class="row">
-      <!-- Blog Entries Column -->
-      <div class="col-md-8">
-        <h1 class="my-4">Safer Boston
-          <!-- <small>Secondary Text</small> -->
-        </h1>
 
         <!-- Blog Post -->
         <div class="card mb-4">
 
-          <img class="card-img-top" src="img/boston.png" alt="Card image cap">
+          <img class="card-img-top" src="img/boston6.jpg" alt="Card image cap" height="200px" width="1500px">
           <div class="card-img-overlay" style="padding:0px;">
            <div class="float-right hidden-md-up rounded"
                 style="background-color: rgb(240, 241, 242)">
@@ -82,62 +134,144 @@
 
           </div>
         </div>
-
-        <div>
-
-
-          <p> <b id='comments'></b> </p>
-          <div class="input-group">
-          <p><b>  Source:</b></p> <input type='text' class="form-control" id='userInput' placeholder='Enter Your Source' paddingt=10px />
-          <br>
-          </div>
-
-       <div class="input-group">
-       <b>Destination:</b> <input type='text' class="form-control" id='userInput' placeholder='Enter Destination' />
-       <br>
       </div>
-       <br/>
-       <div class="input-group" >
-       <input type='button'  class="btn btn-primary md-2" onclick='changeText2()' value='Submit'/>
-       </div>
-
-        </div>
-
-      </div>
-
-      <!-- Sidebar Widgets Column -->
-      <div class="col-md-4">
-
-          <div id="googleMap" style="width:100%;height:100px;"></div>
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2949.1272334915802!2d-71.0913603845474!3d42.339810644372825!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89e37a1999cf5ce1%3A0xc97b00e66522b98c!2sNortheastern+University!5e0!3m2!1sen!2sus!4v1552175654390" width="400px" height="400px" frameborder="0" style="border:0" ></iframe>
-            <!-- <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY&callback=myMap"></script> -->
-            <p></p>
-
-          </div>
-        </div>
-
-
-
-      </div>
+    </div>
 
     </div>
-    <!-- /.row -->
+    <div style="display: none">
+        <input id="origin-input" class="controls" type="text"
+            placeholder="Enter an origin location">
 
+        <input id="destination-input" class="controls" type="text"
+            placeholder="Enter a destination location">
 
-  <!-- /.container -->
+        <div id="mode-selector" class="controls">
+          <input type="radio" name="type" id="changemode-walking" checked="checked">
+          <label for="changemode-walking">Walking</label>
 
-  <!-- Footer -->
-  <footer class="py-5 bg-dark">
-    <div class="container">
-      <p class="m-0 text-center text-white">Copyright &copy; Your Website 2019</p>
+          <input type="radio" name="type" id="changemode-transit">
+          <label for="changemode-transit">Transit</label>
+
+          <input type="radio" name="type" id="changemode-driving">
+          <label for="changemode-driving">Driving</label>
+        </div>
     </div>
-    <!-- /.container -->
-  </footer>
 
-  <!-- Bootstrap core JavaScript -->
-  <script src="vendor/jquery/jquery.min.js"></script>
-  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <div id="map"></div>
+  </div>
 
-</body>
+    <script>
+// This example requires the Places library. Include the libraries=places
+// parameter when you first load the API. For example:
+// <script
+// src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
 
+function initMap() {
+  var map = new google.maps.Map(document.getElementById('map'), {
+    mapTypeControl: false,
+    center: {lat: 42.361145, lng: -71.057083},
+    zoom: 13
+  });
+
+  new AutocompleteDirectionsHandler(map);
+}
+
+/**
+ * @constructor
+ */
+function AutocompleteDirectionsHandler(map) {
+  this.map = map;
+  this.originPlaceId = null;
+  this.destinationPlaceId = null;
+  this.travelMode = 'WALKING';
+  this.directionsService = new google.maps.DirectionsService;
+  this.directionsDisplay = new google.maps.DirectionsRenderer;
+  this.directionsDisplay.setMap(map);
+
+  var originInput = document.getElementById('origin-input');
+  var destinationInput = document.getElementById('destination-input');
+  var modeSelector = document.getElementById('mode-selector');
+
+  var originAutocomplete = new google.maps.places.Autocomplete(originInput);
+  // Specify just the place data fields that you need.
+  originAutocomplete.setFields(['place_id']);
+
+  var destinationAutocomplete =
+      new google.maps.places.Autocomplete(destinationInput);
+  // Specify just the place data fields that you need.
+  destinationAutocomplete.setFields(['place_id']);
+
+  this.setupClickListener('changemode-walking', 'WALKING');
+  this.setupClickListener('changemode-transit', 'TRANSIT');
+  this.setupClickListener('changemode-driving', 'DRIVING');
+
+  this.setupPlaceChangedListener(originAutocomplete, 'ORIG');
+  this.setupPlaceChangedListener(destinationAutocomplete, 'DEST');
+
+  this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(originInput);
+  this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(
+      destinationInput);
+  this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(modeSelector);
+}
+
+// Sets a listener on a radio button to change the filter type on Places
+// Autocomplete.
+AutocompleteDirectionsHandler.prototype.setupClickListener = function(
+    id, mode) {
+  var radioButton = document.getElementById(id);
+  var me = this;
+
+  radioButton.addEventListener('click', function() {
+    me.travelMode = mode;
+    me.route();
+  });
+};
+
+AutocompleteDirectionsHandler.prototype.setupPlaceChangedListener = function(
+    autocomplete, mode) {
+  var me = this;
+  autocomplete.bindTo('bounds', this.map);
+
+  autocomplete.addListener('place_changed', function() {
+    var place = autocomplete.getPlace();
+
+    if (!place.place_id) {
+      window.alert('Please select an option from the dropdown list.');
+      return;
+    }
+    if (mode === 'ORIG') {
+      me.originPlaceId = place.place_id;
+    } else {
+      me.destinationPlaceId = place.place_id;
+    }
+    me.route();
+  });
+};
+
+AutocompleteDirectionsHandler.prototype.route = function() {
+  if (!this.originPlaceId || !this.destinationPlaceId) {
+    return;
+  }
+  var me = this;
+
+  this.directionsService.route(
+      {
+        origin: {'placeId': this.originPlaceId},
+        destination: {'placeId': this.destinationPlaceId},
+        travelMode: this.travelMode
+      },
+      function(response, status) {
+        if (status === 'OK') {
+          me.directionsDisplay.setDirections(response);
+        } else {
+          window.alert('Directions request failed due to ' + status);
+        }
+      });
+};
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDPVk3oxRMd1zHE8VrK0hLsJNo2_6kCTiM&libraries=places&callback=initMap"
+         async defer></script>
+   <div id="map"></div>
+
+  </body>
 </html>
