@@ -16,8 +16,8 @@ PICKLE_FILE = "dataDict.p"
 TEXTFILE_FOR_DATA_TO_BE_PARSED = "apiData.json"
 ZONE_RANGE = 0.005
 DEPT_DATE = date.today() # Have set it to default, needs to be updated
-URL_TO_BE_SCRAPED = 'https://maps.googleapis.com/maps/api/directions/json?origin=42.361361,-71.062872&destination=42.358853,-71.067669&departure_time=1553433312&alternatives=true&mode=walking&key=AIzaSyDPVk3oxRMd1zHE8VrK0hLsJNo2_6kCTiM'
-
+URL_TO_BE_SCRAPED = 'https://maps.googleapis.com/maps/api/directions/json?origin=42.361361,-71.062872&destination=42.358853,-71.067669&departure_time=1553433312&alternatives=true&mode=walking&key=' + API_KEY
+API_KEY = ""
 
 def loadFileIntoPickle():
 
@@ -135,6 +135,7 @@ def main():
 	# loadFileIntoPickle() # Call this method first time the application is executed.
 	# end_time = datetime.now()
 	# print("Time taken to load the pickle: " + str(end_time - start_time))
+	
 	parseDataSet(source=(42.34638135, -71.10379454), destination=(42.34284135, -71.09698955), dept_time=1553433312)
 	points, legs_distance, legs_duration = parseDataFromAPI(URL_TO_BE_SCRAPED)
 
