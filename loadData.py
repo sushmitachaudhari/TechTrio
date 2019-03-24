@@ -20,7 +20,7 @@ reader = csv.DictReader(open(DATA, 'r'))
 PICKLE_FILE = "dataDict.p"
 TEXTFILE_FOR_DATA_TO_BE_PARSED = "apiData.json"
 ZONE_RANGE = 0.005
-ALLOWED_DISTANCE = 0.25
+ALLOWED_DISTANCE = 0.005
 DEPT_DATE = date.today() # Have set it to default, needs to be updated
 # URL_TO_BE_SCRAPED = 'https://maps.googleapis.com/maps/api/directions/json?origin=42.361361,-71.062872&destination=42.358853,-71.067669&departure_time=1553433312&alternatives=true&mode=walking&key=' + API_KEY
 SECRET_KEY = "AIzaSyDPVk3oxRMd1zHE8VrK0hLsJNo2_6kCTiM"
@@ -234,11 +234,14 @@ def is_close_to_crime(person, crime):
 # completely safe ---> 0
 def pathEvaluator(path, crimes):
     score = 0
+#     i = 0
     for point_pair in zip(path[1:], path):
         for crime in crimes:
             if is_close_to_crime(point_pair[0], crime):
                 score = score + 1*(distance(point_pair[0], point_pair[1]))
+#                 i = i + 1
         
+#     print("number of crimes: " + str(i))
     return score
    
    
@@ -256,12 +259,11 @@ def main():
 	points, legs_distance, legs_duration = parseDataFromAPI(url)
 
 # 	testList = [origin, destin]
- 	 	
 	x1, y1 = origin
 	x2, y2 = destin
 	a = (y2 - y1) / (x2 - x1)
 	mid1, mid2 = ((x1 + x2) / 2, (y1 + y2) / 2)
-	for i in range(-2,3):
+	for i in [-2, 2, -1, 1]:
 		factor = distance(origin, destin) / 6
 		i = i * factor / sqrt(1 + a**2)
 		waypoint = (mid1 + 1 * i, mid2 - a* i)
@@ -271,6 +273,8 @@ def main():
 		points = points + points2
 		legs_distance = legs_distance + legs_distance2
 		legs_duration = legs_duration + legs_duration2
+		if len(points) > 3:
+			break
   	
 # 	x, y = zip(*testList)
 # 	plt.scatter(x, y)
