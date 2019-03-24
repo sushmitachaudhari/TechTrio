@@ -3,19 +3,28 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>BostonSafe</title>
+    <title>SafeWalk Boston</title>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/semantic.min.css" >
     <meta charset="utf-8">
     <style>
       #map {
-        height: 70%;
+        height: 550px;
+        width: 1140px;
+        line-height: 0em;
+        /* width: 75%;
+        align-content: center; */
       }
+
+      footer {
+  display: block;
+  }
       /* Optional: Makes the sample page fill the window. */
       html, body {
         height: 100%;
         margin: 0;
         padding: 0;
+        line-height: 0em important;
       }
       .controls {
         margin-top: 10px;
@@ -60,18 +69,68 @@
       li{
       	font-family: georgia;
       }
+      small {
+    font-size: .5em
+}
+
+header, footer {
+      padding: 1em;
+      color: white;
+      background-color: #007196;
+      clear: left;
+      text-align: center;
+  }
+  nav {
+      float: right;
+      max-width: 163px;
+      padding: 1em;
+      /* border: solid #333 */
+  }
+  nav ul {
+      list-style-type: none;
+      padding: 0;
+  }
+  nav ul a {
+      text-decoration: none;
+
+  }
+  a{
+    color:orange;
+  }
+
+  .about{
+    text-decoration: underline;
+  }
+
+  /* #key{
+    line-height: 1.42em;
+  } */
+
+
 
     </style>
   </head>
   <body>
   	<div class= "ui main container segment">
-  		<h1 style="font-size: 75px; font-family: Arial; color:#0000A0">BostonSafe
+
+      <header>
+    <h3>Welcome To SafeWalk. Please click on <a id="about" href="About.html" style="">About Us</a> to know about the app.</h3>
+  </header>
+  <nav>
+    <h2>Key:</h2>
+    <ul id="key">
+      <li><a style="color:green">Green: Safest</a></li>
+      <li><a style="color:orange">Yellow: OK</a></li>
+      <li><a style="color:purple">Purple: Caution</a></li>
+      <li><a style="color:red">Red: Avoid</a></li>
+
+    </ul>
+  </nav>
+  		<h1 class="fixed" style="font-size: 75px; font-family: Arial; color:#0000A0">SafeWalk <small class="absolute" style="color:#2AC6F0">Boston</small>
       <img src="img/protection.png  " width="70" height="53" alt="W3C" /></h1>
-  		<h2 style="text-align: left; font-family: Arial">Helps you take the safest way around Boston</h2>
-      <h3 style="text-align: right; font-family:Arial; color:Green;">Green: Safest</h3>
-      <!-- <h3 style="text-align: right; font-family:Arial; color:Yellow;">Yellow: Safe</h3>
-      <h3 style="text-align: right; font-family:Arial; color:Purple;">Purple: Be cautious</h3>-->
-  	</div>
+  		</div>
+
+
     <input id="origin-input" class="controls" type="text"
         placeholder="Enter an origin location">
 
@@ -89,10 +148,15 @@
       <label for="changemode-driving">Driving</label>
     </div>
 
-    <div id="map" class="ui container"></div>
+  <div id="map" style="margin-left:155px"></div>
    <div class = "ui container">
-   	<h2>Choose the safest path for a safe travel!</h2>
+   	<h3> Scroll down to find the routes. Please choose the green route if possible for a safe travel</h3>
+    <p ><h3 style="color:green; ">What Do The Keys Mean:</h3> Our algorithm comes up with multiple routes from origin to destination. The Green route
+      is the path that avoids the streets where crime index is higher. Hence, it might be the safest. Likewise, yellow is safer with fewer crimes in the past along the route. Similarly, purple path has a higher crimes.
+
+
    </div>
+
    <!-- TO-DO: Remove the API_KEY before commiting : Sushmita-->
    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDPVk3oxRMd1zHE8VrK0hLsJNo2_6kCTiM&libraries=places"></script>
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
@@ -329,14 +393,12 @@ dindex[k]+=4;
       (color[k]) ;
    document.getElementById(distance).innerHTML = "Distance  : " +
       (response.routes[k].legs[0].distance.text) ;
-    //console.log((response.routes[i].legs[0].distance.value) / 1000 + "killo meters");
-    // Display the duration:
-    document.getElementById(duration).innerHTML = "Time duration for reaching : " +
+
+    document.getElementById(duration).innerHTML = "Duration : " +
       response.routes[k].legs[0].duration.text;
     console.log(response.routes[k].legs[0]);
   infoWindow.setPosition(posInit);
-   // var message = 'dangerIndex is :'+dindex[k];
-  // document.getElementById(safetyi).innerHTML = message;
+
   var dis='Route :'+k;
         }
 
@@ -354,6 +416,12 @@ for (var j = 0; j < routes.length; j++) {
         navigator.geolocation.getCurrentPosition(initMap);
       });
     </script>
+
+    <!-- <footer>
+   <p>Posted by: Team TechTrio @TechTogether</p>
+   <p>Contact information: <a href="mailto:chaudhari.sushmita@gmail.com">
+   chaudhari.sushmita@gmail.com</a></p>
+   </footer> -->
 
   </body>
 </html>

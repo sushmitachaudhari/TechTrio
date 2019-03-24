@@ -1,0 +1,103 @@
+<html>
+<head>
+  <title>SafeWalk Boston</title>
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/semantic.min.css" >
+  <meta charset="utf-8">
+  <style>
+    header, footer {
+          padding: 1em;
+          color: white;
+          background-color: #007196;
+          clear: left;
+          text-align: center;
+      }
+      nav {
+          float: right;
+          max-width: 163px;
+          padding: 1em;
+          /* border: solid #333 */
+      }
+      nav ul {
+          list-style-type: none;
+          padding: 0;
+      }
+      nav ul a {
+          text-decoration: none;
+
+      }
+
+
+    </style>
+  </head>
+  <body>
+    <header>
+  <h3>Welcome To SafeWalk. Please click on <a id="SafeWalk" href="index.html" style="">SafeWalk</a> to use the app.</h3>
+</header>
+    <div style="height:600px; padding:10px;">
+
+      <p ><h3 style="color:cyan; ">How To Use It:</h3> Choose the origin and destination. After your input, the app shows different routes on the map to reach from the
+        source to destination. Each path is colored differently. Please use the key on the top-right to see what each color means. After that scroll down
+        to see more details about the routes. Be Safe :)
+
+        <p ><h3 style="color:green; ">What Do The Keys Mean:</h3> Our algorithm comes up with multiple routes from origin to destination. The Green route
+          is the path that avoids the streets where crime index is higher. Hence, it might be the safest. Likewise, yellow is safer with fewer crimes in the past along the route. Similarly, purple path has a higher crimes.
+</p>
+*****************************************************************************************************************************************************************************************************************************************************************************
+      <p style="font-family:Arial;"><b>Inspiration:</b>
+Choosing to walk to your destination is cheap, easy, eco-friendly and healthy! What if we could also make it safe, whatever the time of the day?
+
+Everyone who has had to walk home late at night knows that feeling of unease. Is this street safe? Should I have turned this corner and avoided this dark stretch of street? What if an app can tell you exactly where to go to stay safe? Google Maps can show you the shortest way, but what about the most important criteria when walking at night, safety? We think it should count too!
+
+<p><b>What it does:</b>
+Our website proposes the safest route to walk to their destination. We take into account the different locations your itinerary will bring you to, the time of the day and the crime statistics in these locations in order to evaluate the safety of different route options, and propose the safest route.
+
+<p><b>How we built it:</b>
+First step was to collect the data we needed and process it to make it usable for our objective. We explored the Destinations API from Google Maps. From it, we were able to retrieve detailed encoded latitude and longitude data about different walking paths options.
+
+For the analysis part, first we parse a the Analyze Boston crime database and retrieve all criminal activity that occurred near the path at a similar time in the day. The path is then scored according to how dense the criminal activity is along the way of the specific path.
+
+Results are then overlayed onto Google's Maps Javascript API, allowing the user to see the routes with the estimated time of travel and total distance, color-coded according to their safety rating.
+
+<p><b>Challenges we ran into:</b>
+Finding a way to have the maps data and the crime dataset work together Displaying our own data onto Google Maps
+
+<p><b>Accomplishments that We're proud of:</b>
+Displaying our own data onto Google Maps.
+
+<p><b>What we learned:</b>
+using the Google Maps APIs, using GitLab,
+
+<p><b>What's next for SafeWalk Boston:</b>
+An app that supports navigation instructions and real-time GPS data
+Display information about the path when the mouse pointer hovers over the path
+SafeWalk New York, SafeWalk Los Angeles, SafeWalk San Francisco, and others!
+Built With
+
+
+
+
+      </div>
+    </body>
+
+
+
+   <footer id="footer">
+				<div class="inner">
+					<div class="flex">
+						<div class="copyright">
+							&copy; Posted by: Team TechTrio @TechTogether<p>
+              Contact information: chaudhari.sushmita@gmail.com<a href="mailto:chaudhari.sushmita@gmail.com"></p>
+						</div>
+						<ul class="icons">
+							<li><a href="#" class="icon fa-facebook"><span class="label">Facebook</span></a></li>
+							<li><a href="#" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
+							<li><a href="#" class="icon fa-linkedin"><span class="label">linkedIn</span></a></li>
+							<li><a href="#" class="icon fa-pinterest-p"><span class="label">Pinterest</span></a></li>
+							<li><a href="#" class="icon fa-vimeo"><span class="label">Vimeo</span></a></li>
+						</ul>
+					</div>
+				</div>
+			</footer>
+
+<html>
