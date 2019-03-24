@@ -19,7 +19,6 @@ TEXTFILE_FOR_DATA_TO_BE_PARSED = "apiData.json"
 ZONE_RANGE = 0.005
 ALLOWED_DISTANCE = 0.25
 DEPT_DATE = date.today() # Have set it to default, needs to be updated
-# URL_TO_BE_SCRAPED = 'https://maps.googleapis.com/maps/api/directions/json?origin=42.361361,-71.062872&destination=42.358853,-71.067669&departure_time=1553433312&alternatives=true&mode=walking&key=' + API_KEY
 SECRET_KEY = ""
 
 def loadFileIntoPickle():
