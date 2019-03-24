@@ -1,7 +1,5 @@
 Hosted here: https://sushmitachaudhari.github.io/TechTrio/
 
-You can use the [editor on GitHub](https://github.com/sushmitachaudhari/TechTrio/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
-
 Our website proposes different routes for the user to walk to their destination. We take into account the different locations along the itinerary, the time of the day and the crime statistics in these locations in order to evaluate the safety of different route options, and propose the safest route.
 
 Github Link: https://github.com/sushmitachaudhari/TechTrio
