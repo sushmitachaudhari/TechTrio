@@ -8,6 +8,8 @@ from datetime import date
 import calendar
 import time
 import urllib.request
+from math import sqrt
+from _blake2 import BLAKE2B_PERSON_SIZE
 
 DATA = "crimes_data.csv"
 
@@ -15,9 +17,10 @@ reader = csv.DictReader(open(DATA, 'r'))
 PICKLE_FILE = "dataDict.p"
 TEXTFILE_FOR_DATA_TO_BE_PARSED = "apiData.json"
 ZONE_RANGE = 0.005
+ALLOWED_DISTANCE = 0.25
 DEPT_DATE = date.today() # Have set it to default, needs to be updated
-URL_TO_BE_SCRAPED = 'https://maps.googleapis.com/maps/api/directions/json?origin=42.361361,-71.062872&destination=42.358853,-71.067669&departure_time=1553433312&alternatives=true&mode=walking&key=' + API_KEY
-API_KEY = ""
+# URL_TO_BE_SCRAPED = 'https://maps.googleapis.com/maps/api/directions/json?origin=42.361361,-71.062872&destination=42.358853,-71.067669&departure_time=1553433312&alternatives=true&mode=walking&key=' + API_KEY
+SECRET_KEY = ""
 
 def loadFileIntoPickle():
 
@@ -72,7 +75,7 @@ def parseDataSet(source, destination, dept_time):
 
 		if higher_time_range >= dept_time and dept_time >= lower_time_range:
 			if ((loc_x <= xMax) and (xMin <= loc_x)) and ((yMin <= loc_y) and (loc_y <= yMax)):
-				crime_locations.append(location)
+				crime_locations.append((loc_x, loc_y))
 		
 	return crime_locations
 
@@ -107,9 +110,9 @@ def obtainWalkingRange(source, destination):
 	return xMax, xMin, yMax, yMin
 
 
-def parseDataFromAPI(URL_TO_BE_SCRAPED):
+def parseDataFromAPI(maps_url):
 
-	with urllib.request.urlopen(URL_TO_BE_SCRAPED) as url:
+	with urllib.request.urlopen(maps_url) as url:
 		text = json.loads(url.read().decode())
 	
 	points = list()
@@ -129,15 +132,89 @@ def parseDataFromAPI(URL_TO_BE_SCRAPED):
 	
 	return points, legs_distance, legs_duration
 
+def url_creator(orig, dest, dep_time):
+    x1, y1 = orig
+    x2, y2 = dest
+    result = "https://maps.googleapis.com/maps/api/directions/json?origin=" + str(
+        x1) + "," + str(y1) + "&destination=" + str(
+        x2) + "," + str(y2) + "&departure_time=" + str(
+        dep_time) + "&alternatives=true&mode=walking&key=" + SECRET_KEY
+    return result
 
+
+def decode(encoded):
+    # array that holds the points
+    points = []
+    index = 0
+    length = len(encoded)
+    lat = 0
+    lng = 0
+    while index < length:
+        #var b
+        shift = 0
+        result = 0
+        while True:
+            b = ord(encoded[index]) - 63 #//finds ascii   
+            index = index + 1#           //and substract it by 63
+            result |= (b & 0x1f) << shift
+            shift = shift + 5
+            if b < 0x20:
+                break
+        if (result & 1) != 0:
+            dlat =  ~(result >> 1)
+        else:
+            dlat = (result >> 1)
+        lat = lat + dlat
+        shift = 0
+        result = 0
+        while True:
+            b = ord(encoded[index]) - 63
+            index = index + 1
+            result |= (b & 0x1f) << shift
+            shift = shift + 5
+            if b < 0x20:
+                break
+        if (result & 1) != 0:
+            dlng =  ~(result >> 1)
+        else:
+            dlng = (result >> 1)
+        lng = lng + dlng
+        points.append((( lat / 1E5),( lng / 1E5)))  
+    return points
+
+def distance(p1, p2):
+    return sqrt((p1[0] - p2[0])**2 + (p1[1] - p2[1])**2)
+
+def is_close_to_crime(person, crime):
+# 	print(type(person))
+# 	print(crime)
+	return distance(person, crime) < ALLOWED_DISTANCE
+
+# high score = danger
+def pathEvaluator(path, crimes):
+    score = 0
+    for point_pair in zip(path[1:], path):
+        for crime in crimes:
+            if is_close_to_crime(point_pair[0], crime):
+                score = score + 1*(distance(point_pair[0], point_pair[1]))
+        
+    return score
+   
+   
 def main():
 	# start_time = datetime.now()
 	# loadFileIntoPickle() # Call this method first time the application is executed.
 	# end_time = datetime.now()
 	# print("Time taken to load the pickle: " + str(end_time - start_time))
+	origin = (42.34638135, -71.10379454)
+	destin = (42.34284135, -71.09698955)
+	time = 1553433312
+	url = url_creator(origin, destin, time)
 	
-	parseDataSet(source=(42.34638135, -71.10379454), destination=(42.34284135, -71.09698955), dept_time=1553433312)
-	points, legs_distance, legs_duration = parseDataFromAPI(URL_TO_BE_SCRAPED)
+	crimes = parseDataSet(source=origin, destination=destin, dept_time=time)
+	points, legs_distance, legs_duration = parseDataFromAPI(url)
+	for path in points:
+		print(pathEvaluator(decode(path), crimes))
 
 
 if __name__ == '__main__':
